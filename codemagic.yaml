@@ -1,0 +1,16 @@
+workflows:
+  ios-unsigned-build:
+    name: Umrah Companion - iOS build check
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      xcode: latest
+    scripts:
+      - name: Install XcodeGen
+        script: brew install xcodegen
+      - name: Generate Xcode project
+        script: xcodegen generate
+      - name: Compile iOS app (unsigned)
+        script: xcodebuild -project UmrahCompanion.xcodeproj -scheme UmrahCompanion -sdk iphoneos -configuration Release -derivedDataPath build/ios CODE_SIGNING_ALLOWED=NO build
+    artifacts:
+      - build/ios/Build/Products/Release-iphoneos/*.app
